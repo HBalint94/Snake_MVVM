@@ -43,16 +43,15 @@ namespace SnakeWindowsFormsApplication.Model
         /// Lépések számának lekérdezése.
         /// </summary>
         public Int32 GameScore { get { return _gameScore; } }
-
-        /// <summary>
-        /// Hátramaradt játékidő lekérdezése.
-        /// </summary>
-        public Timer GameTime { get { return _gameTimer; } }
+        
+        public Int32 GameTime { get; set; }
 
         /// <summary>
         /// Játéktábla lekérdezése.
         /// </summary>
         public SnakeGameTable Table { get { return _table; } }
+
+        public Timer GameTimer { get { return _gameTimer; } }
 
         /// <summary>
         /// Játék végének lekérdezése.
@@ -89,16 +88,19 @@ namespace SnakeWindowsFormsApplication.Model
         /// Sudoku játék példányosítása.
         /// </summary>
         /// <param name="dataAccess">Az adatelérés.</param>
-        public SnakeGameModel(ISnakeDataAccess dataAccess)
+        public SnakeGameModel(ISnakeDataAccess dataAccess, Int32 size)
         {
             _dataAccess = dataAccess;
-      
-        }
-        public SnakeGameModel(SnakeGameTable table)
-        {
-            _table = table;
+            _table = new SnakeGameTable(size);
+            _gameTimer = new Timer();
+            NewGame(size);
+            _gameTimer.Elapsed += new ElapsedEventHandler(doMove);
         }
 
+        private void doMove(object sender, ElapsedEventArgs e)
+        {   
+            move();
+        }
         #endregion
 
         #region Public game methods
@@ -108,7 +110,6 @@ namespace SnakeWindowsFormsApplication.Model
         /// </summary>
         public void NewGame(Int32 size)
         {
-            _table = new SnakeGameTable(size);
             _snake = new Snake((size / 2) + 1, (size / 2) + 1);
             _gameScore = 0; // pontok 0
             _gameTableSize = size; // pályaméret beállítása
@@ -213,8 +214,11 @@ namespace SnakeWindowsFormsApplication.Model
                     Int32 oldPosXofTail = _snake.getLast()._posX; // ez a két kordináta azért kell, hogy tudjam léptetni a kígyót a felületen
                     Int32 oldPosYofTail = _snake.getLast()._posY;
                     _snake.StepTheTailOfTheSnake();
-                    SnakeMoved(this, new SnakeEventArgs(_gameScore,false,_snake.getHead()._posX, _snake.getHead()._posY, oldPosXofTail ,
-                        oldPosYofTail, false));
+                    if (SnakeMoved != null)
+                    {
+                        SnakeMoved.Invoke(this, new SnakeEventArgs(_gameScore, false, _snake.getHead()._posX, _snake.getHead()._posY, oldPosXofTail,
+                            oldPosYofTail, false));
+                    }
                 }
 
             }

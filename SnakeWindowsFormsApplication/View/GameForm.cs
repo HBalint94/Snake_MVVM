@@ -15,7 +15,7 @@ namespace SnakeWindowsFormsApplication
     public partial class GameForm : Form
     {
         #region VARIABLES
-        private SnakeGameTable _gameTable;
+        private SnakeFileDataAccess _dataAccess; 
         private SnakeGameModel _gamemodel;
         private Button[,] _buttonGrid;
         private Int32 _mapsize;
@@ -27,41 +27,35 @@ namespace SnakeWindowsFormsApplication
         {
             InitializeComponent();
             _gamestarted = false;
-
         }
         #endregion
 
-        #region METHODS
-        private void newGame()
+        private void GameForm_Load(Object sender, EventArgs e)
         {
-            if (_gamestarted)
-            {
-                //egyszer már el volt indítva, 
-                //ezért hogy ne bugoljon össze 2 elindított játék,
-                //a korábbit 'töröljük'.
-                gameTableBox.KeyUp -= new KeyEventHandler(keyPressed);
-                _gamemodel.SnakeMoved -= new EventHandler<SnakeEventArgs>(SnakeMoved);
-                _gamemodel.GameOver -= new EventHandler<SnakeEventArgs>(gameOver);
-                _gamemodel = null;
-
-              }
-
-            _gamestarted = true;
-            progressLabel.Text = "A játék folyik!";
-            gameTableBox.KeyUp += new KeyEventHandler(keyPressed);
-            generateTable(15);
-
-            gameTableBox.Focus();
-            _gameTable = new SnakeGameTable(15);
-            _gamemodel = new SnakeGameModel(_gameTable);
-
-            _gamemodel.SnakeMoved -= new EventHandler<SnakeEventArgs>(SnakeMoved);
-            _gamemodel.GameOver -= new EventHandler<SnakeEventArgs>(gameOver);
-
-
-
+            _mapsize = 15;
+            
         }
 
+        private void setTheOptions()
+        {
+            //adatelérés példányosítása
+            _dataAccess = new SnakeFileDataAccess();
+            // Játék model példányosítása
+            _gamemodel = new SnakeGameModel(_dataAccess, _mapsize);
+            // Snake mozgásának esemény kezelőjének és a játék vége eseménykezelőjének felvétele
+            _gamemodel.SnakeMoved -= new EventHandler<SnakeEventArgs>(SnakeMoved);
+            _gamemodel.GameOver -= new EventHandler<SnakeEventArgs>(gameOver);
+            // Generálom a táblát a kiválasztott mérettel a játék indul.
+            generateTable(_mapsize);
+            _gamestarted = true;
+            progressLabel.Text = "A játék folyik!";
+            // felveszem a megjelenített pályára a nyomógombokat és aktiválom is őket.
+            gameTableBox.KeyUp += new KeyEventHandler(keyPressed);
+            gameTableBox.Focus();
+        }
+        #region METHODS
+
+        
         private void SnakeMoved(object sender, SnakeEventArgs e)
         {
             if (e.isEat)
@@ -138,31 +132,63 @@ namespace SnakeWindowsFormsApplication
                 for (Int32 j = 0; j < size; j++)
                 {
                     _buttonGrid[i, j] = new Button();
-                    _buttonGrid[i, j].Size = new Size(15, 15);
+                    _buttonGrid[i, j].Size = new Size(15,15);
                     _buttonGrid[i, j].Text = String.Empty;
                     _buttonGrid[i, j].Location = new Point(5 + 15 * j, 10 + 15 * i);
                     _buttonGrid[i, j].Enabled = false;
-                    if(_gameTable.GetValue(i,j) == 1)
+                    if (_gamemodel.Table.GetValue(i, j) == 0)
+                    {
+                        _buttonGrid[i, j].BackColor = Color.Black;
+                    }
+                    else if (_gamemodel.Table.GetValue(i,j) == 1)
                     {
                         _buttonGrid[i, j].BackColor = Color.DarkOliveGreen;
+                    }
+                    else if(_gamemodel.Table.GetValue(i,j) == 2)
+                    {
+                        _buttonGrid[i, j].BackColor = Color.Red;
                     }
                     gameTableBox.Controls.Add(_buttonGrid[i, j]);
                 }
             gameTableBox.Visible = true;
         }
 
+        private void SetupTable()
+        {
+            for(Int32 i = 0; i < _buttonGrid.GetLength(0); i++)
+            {
+                for(Int32 j = 0;j < _buttonGrid.GetLength(1); j++)
+                {
+                    if( _gamemodel.Table.GetValue(i,j) == 0)
+                    {
+                        _buttonGrid[i, j].BackColor = Color.Black;
+                    }
+                    else if (_gamemodel.Table.GetValue(i, j) == 1)
+                    {
+                        _buttonGrid[i, j].BackColor = Color.DarkOliveGreen;
+                    }
+                    else if (_gamemodel.Table.GetValue(i, j) == 2)
+                    {
+                        _buttonGrid[i, j].BackColor = Color.Red;
+                    }
+                }
+            }
+            scoreLabel.Text = _gamemodel.GameScore.ToString();
+           // GameTimeLabel.Text = TimeSpan.FromSeconds(_gamemodel.GameTime).ToString("g");
+        }
+
         private void newGameOption_Click(Object sender, EventArgs e)
         {
+            setTheOptions();
             saveGameOption.Enabled = true;
-            newGame();
-
-          //  _gamemodel.GameTime.Start();
+            _gamemodel.NewGame(_mapsize);
+            _gamemodel.GameTimer.Start();
         }
 
         private void exitOption_Click(Object sender, EventArgs e)
         {
-            Boolean restartTimer = _gamemodel.GameTime.Enabled;
-            _gamemodel.GameTime.Stop();
+            Boolean restartTimer = _gamemodel.GameTimer.Enabled;
+            _gamemodel.GameTimer.Stop();
 
             // megkérdezzük, hogy biztos ki szeretne-e lépni
             if (MessageBox.Show("Biztosan ki szeretne lépni?", "Snake játék", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -173,23 +199,23 @@ namespace SnakeWindowsFormsApplication
             else
             {
                 if (restartTimer)
-                    _gamemodel.GameTime.Start();
+                    _gamemodel.GameTimer.Start();
             }
         }
 
         private void smallGameTableOption_Click(Object sender, EventArgs e)
         {
-            _gamemodel.GameTableSize = 10;
+            _mapsize = 10;
         }
 
         private void mediumGameTableOption_Click(Object sender, EventArgs e)
         {
-            _gamemodel.GameTableSize = 15;
+            _mapsize= 15;
         }
 
         private void bigGameTableOption_Click(Object sender, EventArgs e)
         {
-            _gamemodel.GameTableSize = 10;
+            _mapsize= 20;
         }
 
         /// <summary>
@@ -197,8 +223,9 @@ namespace SnakeWindowsFormsApplication
         /// </summary>
         private async void saveGameOption_Click(Object sender, EventArgs e)
         {
-            Boolean restartTimer = _gamemodel.GameTime.Enabled;
-            _gamemodel.GameTime.Stop();
+
+            Boolean restartTimer = _gamemodel.GameTimer.Enabled;
+            _gamemodel.GameTimer.Stop();
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -214,15 +241,16 @@ namespace SnakeWindowsFormsApplication
             }
 
             if (restartTimer)
-                _gamemodel.GameTime.Start();
+                _gamemodel.GameTimer.Start();
         }
         /// <summary>
         /// Játék betöltésének eseménykezelője.
         /// </summary>
         private async void loadGameOption_Click(Object sender, EventArgs e)
         {
-            Boolean restartTimer = _gamemodel.GameTime.Enabled;
-            _gamemodel.GameTime.Stop();
+           
+            Boolean restartTimer = _gamemodel.GameTimer.Enabled;
+            _gamemodel.GameTimer.Stop();
 
             if (openFileDialog.ShowDialog() == DialogResult.OK) // ha kiválasztottunk egy fájlt
             {
@@ -236,18 +264,20 @@ namespace SnakeWindowsFormsApplication
                 {
                     MessageBox.Show("Játék betöltése sikertelen!" + Environment.NewLine + "Hibás az elérési út, vagy a fájlformátum.", "Hiba!", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-                    _gamemodel.NewGame(_gamemodel.GameTableSize);
+                    _gamemodel.NewGame(_mapsize);
                     saveGameOption.Enabled = true;
                 }
 
-                newGame();
+                SetupTable();
             }
 
             if (restartTimer)
-                _gamemodel.GameTime.Start();
+                _gamemodel.GameTimer.Start();
         }
 
         #endregion
+
+      
     }
 } 
 

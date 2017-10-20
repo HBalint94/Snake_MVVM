@@ -9,3 +9,13 @@ C:\Users\Balint\Documents\Eva2\SnakeWindowsFormsApplication\SnakeWindowsFormsApp
 C:\Users\Balint\Documents\Eva2\SnakeWindowsFormsApplication\SnakeWindowsFormsApplication\bin\Debug\SnakeWindowsFormsApplication.pdb
 C:\Users\Balint\Documents\Eva2\SnakeWindowsFormsApplication\SnakeWindowsFormsApplication\obj\Debug\SnakeWindowsFormsApplication.exe
 C:\Users\Balint\Documents\Eva2\SnakeWindowsFormsApplication\SnakeWindowsFormsApplication\obj\Debug\SnakeWindowsFormsApplication.pdb
+C:\Users\Balint\Documents\Eva2\Snake\SnakeWindowsFormsApplication\bin\Debug\SnakeWindowsFormsApplication.exe.config
+C:\Users\Balint\Documents\Eva2\Snake\SnakeWindowsFormsApplication\bin\Debug\SnakeWindowsFormsApplication.exe
+C:\Users\Balint\Documents\Eva2\Snake\SnakeWindowsFormsApplication\bin\Debug\SnakeWindowsFormsApplication.pdb
+C:\Users\Balint\Documents\Eva2\Snake\SnakeWindowsFormsApplication\obj\Debug\SnakeWindowsFormsApplication.csprojResolveAssemblyReference.cache
+C:\Users\Balint\Documents\Eva2\Snake\SnakeWindowsFormsApplication\obj\Debug\SnakeWindowsFormsApplication.GameForm.resources
+C:\Users\Balint\Documents\Eva2\Snake\SnakeWindowsFormsApplication\obj\Debug\SnakeWindowsFormsApplication.Properties.Resources.resources
+C:\Users\Balint\Documents\Eva2\Snake\SnakeWindowsFormsApplication\obj\Debug\SnakeWindowsFormsApplication.csproj.GenerateResource.Cache
+C:\Users\Balint\Documents\Eva2\Snake\SnakeWindowsFormsApplication\obj\Debug\SnakeWindowsFormsApplication.csproj.CoreCompileInputs.cache
+C:\Users\Balint\Documents\Eva2\Snake\SnakeWindowsFormsApplication\obj\Debug\SnakeWindowsFormsApplication.exe
+C:\Users\Balint\Documents\Eva2\Snake\SnakeWindowsFormsApplication\obj\Debug\SnakeWindowsFormsApplication.pdb
