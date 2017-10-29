@@ -58,7 +58,6 @@ namespace SnakeWindowsFormsApplication
         
         private void SnakeMoved(object sender, SnakeEventArgs e)
         {
-            _gamemodel.move();
             if (e.isEat)
             {
                 _buttonGrid[e.headPosX, e.headPosY].BackColor = Color.DarkOliveGreen;
