@@ -82,18 +82,21 @@
             this.loadGameOption.Name = "loadGameOption";
             this.loadGameOption.Size = new System.Drawing.Size(152, 22);
             this.loadGameOption.Text = "Játék betöltése";
+            this.loadGameOption.Click += new System.EventHandler(this.loadGameOption_Click);
             // 
             // saveGameOption
             // 
             this.saveGameOption.Name = "saveGameOption";
             this.saveGameOption.Size = new System.Drawing.Size(152, 22);
             this.saveGameOption.Text = "Játék mentése";
+            this.saveGameOption.Click += new System.EventHandler(this.saveGameOption_Click);
             // 
             // exitOption
             // 
             this.exitOption.Name = "exitOption";
             this.exitOption.Size = new System.Drawing.Size(152, 22);
             this.exitOption.Text = "KIlépés";
+            this.exitOption.Click += new System.EventHandler(this.exitOption_Click);
             // 
             // settingsDropDown
             // 
@@ -110,18 +113,21 @@
             this.smallGameTableOption.Name = "smallGameTableOption";
             this.smallGameTableOption.Size = new System.Drawing.Size(152, 22);
             this.smallGameTableOption.Text = "Kis pálya";
+            this.smallGameTableOption.Click += new System.EventHandler(this.smallGameTableOption_Click);
             // 
             // mediumGameTableOption
             // 
             this.mediumGameTableOption.Name = "mediumGameTableOption";
             this.mediumGameTableOption.Size = new System.Drawing.Size(152, 22);
             this.mediumGameTableOption.Text = "Közepes pálya";
+            this.mediumGameTableOption.Click += new System.EventHandler(this.mediumGameTableOption_Click);
             // 
             // bigGameTableOption
             // 
             this.bigGameTableOption.Name = "bigGameTableOption";
             this.bigGameTableOption.Size = new System.Drawing.Size(152, 22);
             this.bigGameTableOption.Text = "Nagy pálya";
+            this.bigGameTableOption.Click += new System.EventHandler(this.bigGameTableOption_Click);
             // 
             // gameTableBox
             // 
@@ -159,6 +165,7 @@
             this.scoreLabel.Name = "scoreLabel";
             this.scoreLabel.Size = new System.Drawing.Size(0, 13);
             this.scoreLabel.TabIndex = 4;
+            this.scoreLabel.Text = "0";
             // 
             // progressLabel
             // 
@@ -180,6 +187,7 @@
             this.MainMenuStrip = this.menuStrip2;
             this.Name = "GameForm";
             this.Text = "Snake";
+            this.Load += new System.EventHandler(this.GameForm_Load);
             this.menuStrip2.ResumeLayout(false);
             this.menuStrip2.PerformLayout();
             this.ResumeLayout(false);

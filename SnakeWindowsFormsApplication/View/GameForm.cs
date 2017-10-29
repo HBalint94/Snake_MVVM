@@ -58,6 +58,7 @@ namespace SnakeWindowsFormsApplication
         
         private void SnakeMoved(object sender, SnakeEventArgs e)
         {
+            _gamemodel.move();
             if (e.isEat)
             {
                 _buttonGrid[e.headPosX, e.headPosY].BackColor = Color.DarkOliveGreen;
@@ -66,7 +67,7 @@ namespace SnakeWindowsFormsApplication
             {
                 _buttonGrid[e.tailPosX, e.tailPosY].BackColor = DefaultBackColor;
                 _buttonGrid[e.headPosX, e.headPosY].BackColor = Color.DarkOliveGreen;
-            }   
+            }
             
         }
         private void gameOver(object sender, SnakeEventArgs e)
@@ -138,7 +139,7 @@ namespace SnakeWindowsFormsApplication
                     _buttonGrid[i, j].Enabled = false;
                     if (_gamemodel.Table.GetValue(i, j) == 0)
                     {
-                        _buttonGrid[i, j].BackColor = Color.Black;
+                        _buttonGrid[i, j].BackColor = Color.WhiteSmoke;
                     }
                     else if (_gamemodel.Table.GetValue(i,j) == 1)
                     {
@@ -174,15 +175,12 @@ namespace SnakeWindowsFormsApplication
                 }
             }
             scoreLabel.Text = _gamemodel.GameScore.ToString();
-           // GameTimeLabel.Text = TimeSpan.FromSeconds(_gamemodel.GameTime).ToString("g");
         }
 
         private void newGameOption_Click(Object sender, EventArgs e)
         {
             setTheOptions();
             saveGameOption.Enabled = true;
-            _gamemodel.NewGame(_mapsize);
-            _gamemodel.GameTimer.Start();
         }
 
         private void exitOption_Click(Object sender, EventArgs e)

@@ -29,19 +29,19 @@ namespace SnakeWindowsFormsApplication.Persistence
                         Int32 tableSize = Int32.Parse(numbers[0]); // beolvassuk a tábla méretét
                         Int32 gameScore = Int32.Parse(numbers[1]); // beolvassuk az aktuális pontszámot.
 
-                    // Kígyó beolvasása
-                        LinkedList<SnakeBodyPart> loadedSnake = new LinkedList<SnakeBodyPart>();
-                        
-                        for(Int32 i = 0; i < gameScore; i++)
-                        {
+                    // Kígyó fejének beolvasása
+                                             
                         line = await reader.ReadLineAsync();
-                         numbers = line.Split(' ');
-                        loadedSnake.AddFirst(new SnakeBodyPart(Int32.Parse(numbers[0]), Int32.Parse(numbers[1]), Int32.Parse(numbers[2]),Int32.Parse(numbers[3])));
+                        numbers = line.Split(' ');
+                        Snake snake = new Snake(Int32.Parse(numbers[0]), Int32.Parse(numbers[1]));
+                        line = await reader.ReadLineAsync();
+                        numbers = line.Split(' ');
+                        snake.DirectionX = Int32.Parse(numbers[0]);
+                        snake.DirectionY = Int32.Parse(numbers[0]);
 
-                        }
-                        Snake snake = new Snake(loadedSnake);
-                     // Tábla létrehozása
-                        SnakeGameTable table = new SnakeGameTable(tableSize,gameScore);
+
+                    // Tábla létrehozása és a kígyó többi részének beolvasása
+                    SnakeGameTable table = new SnakeGameTable(tableSize,gameScore);
 
 
                         for (Int32 i = 0; i < tableSize; i++)
@@ -50,6 +50,11 @@ namespace SnakeWindowsFormsApplication.Persistence
                             numbers = line.Split(' ');
                             for (Int32 j = 0; j < tableSize; j++)
                             {
+                            Int32 currentValue = Int32.Parse(numbers[0]);
+                                if(currentValue == 1)
+                                {
+                                snake.AddElementToSnake(new SnakeBodyPart(i, j));
+                                }
                                 table.SetValue(i, j, Int32.Parse(numbers[j]));
                             }
                         }
@@ -76,20 +81,17 @@ namespace SnakeWindowsFormsApplication.Persistence
                     using (StreamWriter writer = new StreamWriter(path)) // fájl megnyitása
                     {
                         writer.WriteAsync(table.Size+ " " +table.Score); // kiírjuk a pályaméretet, kiírjuk az aktuális pontszámot
-                        
-                    foreach (SnakeBodyPart val in snake.getSnake().Reverse())
-                    {
-                        writer.WriteAsync(val._posX + " " + val._posY + " " + val._directionX + " " + val._directionX);
-                    }
-                   
+                        writer.WriteAsync(snake.getHead()._posX + " "+snake.getHead()._posY); //melyik mező a kígyó feje
+                        writer.WriteAsync(snake.DirectionX + " " + snake.DirectionY); // Kiírom, hogy a kígyó épp milyen irányba készült haladni 
+                 
                          for (Int32 i = 0; i < table.Size; i++)
-                        {
-                            for (Int32 j = 0; j < table.Size; j++)
-                            {
+                         {
+                             for (Int32 j = 0; j < table.Size; j++)
+                             {
                                 await writer.WriteAsync(table[i, j] + " "); // kiírjuk az értékeket
-                            }
+                             }
                             await writer.WriteLineAsync();
-                        }
+                         }
                     }
                 }
                 catch

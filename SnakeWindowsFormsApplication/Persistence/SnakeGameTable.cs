@@ -11,16 +11,7 @@ namespace SnakeWindowsFormsApplication.Persistence
     {
         public Int32 _posX { get; set; }
         public Int32 _posY { get; set; }
-        public Int32 _directionX { get; set; }
-        public Int32 _directionY { get; set; }
 
-        public SnakeBodyPart(Int32 x,Int32 y,Int32 d1,Int32 d2)
-        {
-            _posX = x;
-            _posY = y;
-            _directionX = d1;
-            _directionY = d2;
-        }
         public SnakeBodyPart(Int32 x,Int32 y)
         {
             _posX = x;
@@ -29,19 +20,22 @@ namespace SnakeWindowsFormsApplication.Persistence
     }
     public class Snake
     {
-        private LinkedList<SnakeBodyPart> _snake;        
-
-        public Snake(LinkedList<SnakeBodyPart> snake)
-        {
-            _snake = snake;
-        }
-
+        private LinkedList<SnakeBodyPart> _snake;
+        
         public Snake(Int32 x,Int32 y)
         {
             _snake = new LinkedList<SnakeBodyPart>();
-            _snake.AddFirst(new SnakeBodyPart(x,y, 1,0));
+            _snake.AddFirst(new SnakeBodyPart(x,y));
 
         }
+        /// <summary>
+        /// A fej iránya ( elég csak ezt tudnunk)
+        /// </summary>
+        public Int32 DirectionX{ get; set; }
+        public Int32 DirectionY { get; set; }
+        /// <summary>
+        /// kígyó mérete
+        /// </summary>
         public Int32 Size() { return _snake.Count(); }
         public SnakeBodyPart getHead() { return _snake.First(); }
         public SnakeBodyPart getLast() { return _snake.Last(); }
@@ -133,9 +127,9 @@ namespace SnakeWindowsFormsApplication.Persistence
         /// <returns>A mező értéke.</returns>
         public Int32 GetValue(Int32 x, Int32 y)
         {
-            if (x < 0 || x >= _fieldValues.GetLength(0))
+            if (x < 0 || x > Size)
                 throw new ArgumentOutOfRangeException("x", "The X coordinate is out of range.");
-            if (y < 0 || y >= _fieldValues.GetLength(1))
+            if (y < 0 || y > Size)
                 throw new ArgumentOutOfRangeException("y", "The Y coordinate is out of range.");
 
             return _fieldValues[x, y];
