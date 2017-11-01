@@ -212,7 +212,7 @@ namespace SnakeWindowsFormsApplication.Model
                     GenerateRandomFood(GameTableSize);
 
                 }
-                else  // ha nem kajába ütköztem, akkor leveszem a farkat.
+                else if(_table.GetValue(newX,newY) == 0) // ha nem kajába ütköztem, akkor leveszem a farkat.
                 {
 
                     _table.SetValue(newX, newY, 1); // a fejet mozgatom egyel a megfelelő irányba
@@ -227,9 +227,16 @@ namespace SnakeWindowsFormsApplication.Model
                             oldPosYofTail, false));
                     }
                 }
+                else // ha saját magának megy a kígyó akkor legyen vége
+                {
+                    _gameOver = true;
+                    GameOver(this, new SnakeEventArgs(_gameScore, true, _snake.getHead()._posX, _snake.getHead()._posY, _snake.getLast()._posX,
+                            _snake.getLast()._posY, false));
+                    _gameTimer.Stop();
+                }
                 OnMoveChange();
             }
-            else
+            else // ha falnak megy a kígyó akkor legyen vége
             {
                 _gameOver = true;
                 GameOver(this, new SnakeEventArgs(_gameScore, true, _snake.getHead()._posX, _snake.getHead()._posY, _snake.getLast()._posX,
