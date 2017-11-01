@@ -56,11 +56,7 @@ namespace SnakeWindowsFormsApplication
 
             _gamemodel.NewGame(_mapsize);
         }
-        private void setTheOptionsFromFile()
-        {
-            _dataAccess = new SnakeFileDataAccess();
-            
-        }
+       
         #region METHODS
 
         
