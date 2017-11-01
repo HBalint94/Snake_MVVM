@@ -43,8 +43,9 @@ namespace SnakeWindowsFormsApplication
             // Játék model példányosítása
             _gamemodel = new SnakeGameModel(_dataAccess, _mapsize);
             // Snake mozgásának esemény kezelőjének és a játék vége eseménykezelőjének felvétele
-            _gamemodel.SnakeMoved -= new EventHandler<SnakeEventArgs>(SnakeMoved);
-            _gamemodel.GameOver -= new EventHandler<SnakeEventArgs>(gameOver);
+            _gamemodel.SnakeMoved += new EventHandler<SnakeEventArgs>(SnakeMoved);
+            _gamemodel.GameOver += gameOver;
+            _gamemodel.OnMoveChange += SetupTable;
             // Generálom a táblát a kiválasztott mérettel a játék indul.
             generateTable(_mapsize);
             _gamestarted = true;
@@ -52,6 +53,13 @@ namespace SnakeWindowsFormsApplication
             // felveszem a megjelenített pályára a nyomógombokat és aktiválom is őket.
             gameTableBox.KeyUp += new KeyEventHandler(keyPressed);
             gameTableBox.Focus();
+
+            _gamemodel.NewGame(_mapsize);
+        }
+        private void setTheOptionsFromFile()
+        {
+            _dataAccess = new SnakeFileDataAccess();
+            
         }
         #region METHODS
 
@@ -68,18 +76,15 @@ namespace SnakeWindowsFormsApplication
                 _buttonGrid[e.headPosX, e.headPosY].BackColor = Color.DarkOliveGreen;
             }
             
+            
         }
         private void gameOver(object sender, SnakeEventArgs e)
         {
-            if (progressLabel.InvokeRequired)
-            {
-                Invoke(new EventHandler<SnakeEventArgs>(gameOver), sender, e);
-                return;
-            }
+           
             progressLabel.Text = "A játék véget ért!";
             gameTableBox.KeyUp -= new KeyEventHandler(keyPressed);
             MessageBox.Show("Vége a játéknak!" +
-                Environment.NewLine + "Ennyi pontja lett " + e.GameScore + MessageBoxButtons.OK + MessageBoxIcon.Information);
+                Environment.NewLine + "Ennyi pontja lett: " + e.GameScore);
         }
 
         private void keyPressed(object sender, KeyEventArgs e)
@@ -94,20 +99,21 @@ namespace SnakeWindowsFormsApplication
                 * */
 
                 case Keys.W:
-                    _gamemodel.setDirection(3);
-                    break;
-                case Keys.A:
                     _gamemodel.setDirection(2);
                     break;
-                case Keys.S:
+                case Keys.A:
                     _gamemodel.setDirection(1);
                     break;
-                case Keys.D:
+                case Keys.S:
                     _gamemodel.setDirection(0);
+                    break;
+                case Keys.D:
+                    _gamemodel.setDirection(3);
                     break;
 
                 case Keys.P:
-                    if (!_gamemodel.isGamePaused)
+                    
+                    if (_gamemodel.isGamePaused)
                     {
                         progressLabel.Text = "A játék folyik!";
                         _gamemodel.isGamePaused = false;
@@ -151,17 +157,19 @@ namespace SnakeWindowsFormsApplication
                     gameTableBox.Controls.Add(_buttonGrid[i, j]);
                 }
             gameTableBox.Visible = true;
+            _gamemodel.GameTimer.Start(); // Timer indítása
+
         }
 
         private void SetupTable()
         {
-            for(Int32 i = 0; i < _buttonGrid.GetLength(0); i++)
+            for(Int32 i = 0; i < _mapsize; i++)
             {
-                for(Int32 j = 0;j < _buttonGrid.GetLength(1); j++)
+                for(Int32 j = 0;j < _mapsize; j++)
                 {
                     if( _gamemodel.Table.GetValue(i,j) == 0)
                     {
-                        _buttonGrid[i, j].BackColor = Color.Black;
+                        _buttonGrid[i, j].BackColor = Color.WhiteSmoke;
                     }
                     else if (_gamemodel.Table.GetValue(i, j) == 1)
                     {
@@ -173,7 +181,8 @@ namespace SnakeWindowsFormsApplication
                     }
                 }
             }
-            scoreLabel.Text = _gamemodel.GameScore.ToString();
+            GameScoreTextLabel.Text = _gamemodel.GameScore.ToString();
+          
         }
 
         private void newGameOption_Click(Object sender, EventArgs e)
@@ -245,7 +254,7 @@ namespace SnakeWindowsFormsApplication
         /// </summary>
         private async void loadGameOption_Click(Object sender, EventArgs e)
         {
-           
+            setTheOptions();
             Boolean restartTimer = _gamemodel.GameTimer.Enabled;
             _gamemodel.GameTimer.Stop();
 

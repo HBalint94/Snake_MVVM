@@ -34,8 +34,8 @@ namespace SnakeWindowsFormsApplication.Model
         /// <summary>
         /// Lépések számának lekérdezése.
         /// </summary>
-        public Int32 GameScore { get { return _gameScore; }set { GameScore = _gameScore; } }
-        
+        public Int32 GameScore { get { return _gameScore; } set { GameScore = _gameScore; } }
+
         /// <summary>
         /// Játék idő 
         /// </summary>
@@ -65,7 +65,7 @@ namespace SnakeWindowsFormsApplication.Model
         /// <summary>
         /// Játék állapota
         /// </summary>
-        public Boolean isGamePaused { get { return _gamePaused; } set { _gamePaused = value; } } 
+        public Boolean isGamePaused { get { return _gamePaused; } set { _gamePaused = value; } }
         #endregion
 
         #region Events
@@ -95,12 +95,15 @@ namespace SnakeWindowsFormsApplication.Model
             _table = new SnakeGameTable(_gameTableSize);
             _gameTimer = new Timer();
             _gameTimer.Elapsed += new ElapsedEventHandler(Moving);
-            NewGame(_gameTableSize);
+            _gameTimer.Interval = 1000;
             
-            
+
         }
 
-        private void Moving(object sender, ElapsedEventArgs e)
+        public delegate void MoveChange();
+        public event MoveChange OnMoveChange = delegate { };
+
+        public void Moving(object sender, ElapsedEventArgs e)
         {
             move();
         }
@@ -114,10 +117,9 @@ namespace SnakeWindowsFormsApplication.Model
         public void NewGame(Int32 size)
         {
             _snake = new Snake((size / 2) + 1, (size / 2) + 1);
-            _gameScore = 0; // pontok 0
+            _gameScore = _snake.Size()-1; // pontok 0
             _gameTableSize = size; // pályaméret beállítása
              GenerateFields(size); // generáljuk a mezőket
-            _gameTimer.Start(); // Timer indítása
             _gamePaused = false;
             _gameOver = false;
            
@@ -160,6 +162,7 @@ namespace SnakeWindowsFormsApplication.Model
                 throw new InvalidOperationException("No data access is provided.");
 
             _table = await _dataAccess.LoadAsync(path);
+           
             _gameScore = _table.Score;
             _gameTimer.Start();
             _gamePaused = false;
@@ -202,9 +205,11 @@ namespace SnakeWindowsFormsApplication.Model
                     _table.SetValue(newX, newY, 1); // a fejet mozgatom egyel a megfelelő irányba
                     _snake.AddElementToSnake(new SnakeBodyPart(newX, newY));
                     _gameScore++;
+                    Table.Score = _gameScore;
 
                     SnakeMoved(this, new SnakeEventArgs(_gameScore, false, _snake.getHead()._posX, _snake.getHead()._posY, _snake.getLast()._posX,
                         _snake.getLast()._posY, true));
+                    GenerateRandomFood(GameTableSize);
 
                 }
                 else  // ha nem kajába ütköztem, akkor leveszem a farkat.
@@ -222,13 +227,15 @@ namespace SnakeWindowsFormsApplication.Model
                             oldPosYofTail, false));
                     }
                 }
-
+                OnMoveChange();
             }
             else
             {
+                _gameOver = true;
                 GameOver(this, new SnakeEventArgs(_gameScore, true, _snake.getHead()._posX, _snake.getHead()._posY, _snake.getLast()._posX,
                         _snake.getLast()._posY, false));
                 _gameTimer.Stop();
+    
             }
 
         }
@@ -236,11 +243,30 @@ namespace SnakeWindowsFormsApplication.Model
         // Ha nem fal vagy nem maga a kigyónak egy része az új mező akkor valid a lépés.
         private Boolean ValidStep(Int32 x,Int32 y)
         {
-            if ((x >= 0 && x < _gameTableSize && _gameTableSize > y && y >= 0) || _table.GetValue(x,y) != 1)
+            if ((x >= 0 && x < _gameTableSize && _gameTableSize > y && y >= 0)) //|| _table.GetValue(x,y) != 1)
             {
                 return true;
             }
             return false;
+        }
+        /// <summary>
+        /// Generálok random kaját ha megette a már lent levőt a kígyó
+        /// </summary>
+        private void GenerateRandomFood(Int32 size)
+        {
+            Random r = new Random();
+            int XInt = r.Next(0, size - 1);
+            int YInt = r.Next(0, size - 1);
+            do
+            {
+                if (_table.GetValue(XInt, YInt) != 0)
+                {
+                    r = new Random();
+                    XInt = r.Next(0, size - 1);
+                    YInt = r.Next(0, size - 1);
+                }
+            } while (_table.GetValue(XInt, YInt) != 0);
+            _table.SetValue(XInt, YInt, 2);
         }
         /// <summary>
         /// LeGenerálom a tábla mezőket

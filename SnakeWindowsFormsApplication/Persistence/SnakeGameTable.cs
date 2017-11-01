@@ -26,6 +26,8 @@ namespace SnakeWindowsFormsApplication.Persistence
         {
             _snake = new LinkedList<SnakeBodyPart>();
             _snake.AddFirst(new SnakeBodyPart(x,y));
+            DirectionX = 1;
+            DirectionY = 0;
 
         }
         /// <summary>

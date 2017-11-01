@@ -41,10 +41,12 @@
             this.gameTableBox = new System.Windows.Forms.GroupBox();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.scoreTextLabel = new System.Windows.Forms.Label();
-            this.scoreLabel = new System.Windows.Forms.Label();
-            this.progressLabel = new System.Windows.Forms.Label();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.GameScoreLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.GameScoreTextLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.progressLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.menuStrip2.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip2
@@ -72,29 +74,28 @@
             // newGameOption
             // 
             this.newGameOption.Name = "newGameOption";
-            this.newGameOption.Size = new System.Drawing.Size(152, 22);
+            this.newGameOption.Size = new System.Drawing.Size(151, 22);
             this.newGameOption.Text = "Új játék";
             this.newGameOption.Click += new System.EventHandler(this.newGameOption_Click);
-
             // 
             // loadGameOption
             // 
             this.loadGameOption.Name = "loadGameOption";
-            this.loadGameOption.Size = new System.Drawing.Size(152, 22);
+            this.loadGameOption.Size = new System.Drawing.Size(151, 22);
             this.loadGameOption.Text = "Játék betöltése";
             this.loadGameOption.Click += new System.EventHandler(this.loadGameOption_Click);
             // 
             // saveGameOption
             // 
             this.saveGameOption.Name = "saveGameOption";
-            this.saveGameOption.Size = new System.Drawing.Size(152, 22);
+            this.saveGameOption.Size = new System.Drawing.Size(151, 22);
             this.saveGameOption.Text = "Játék mentése";
             this.saveGameOption.Click += new System.EventHandler(this.saveGameOption_Click);
             // 
             // exitOption
             // 
             this.exitOption.Name = "exitOption";
-            this.exitOption.Size = new System.Drawing.Size(152, 22);
+            this.exitOption.Size = new System.Drawing.Size(151, 22);
             this.exitOption.Text = "KIlépés";
             this.exitOption.Click += new System.EventHandler(this.exitOption_Click);
             // 
@@ -111,21 +112,21 @@
             // smallGameTableOption
             // 
             this.smallGameTableOption.Name = "smallGameTableOption";
-            this.smallGameTableOption.Size = new System.Drawing.Size(152, 22);
+            this.smallGameTableOption.Size = new System.Drawing.Size(148, 22);
             this.smallGameTableOption.Text = "Kis pálya";
             this.smallGameTableOption.Click += new System.EventHandler(this.smallGameTableOption_Click);
             // 
             // mediumGameTableOption
             // 
             this.mediumGameTableOption.Name = "mediumGameTableOption";
-            this.mediumGameTableOption.Size = new System.Drawing.Size(152, 22);
+            this.mediumGameTableOption.Size = new System.Drawing.Size(148, 22);
             this.mediumGameTableOption.Text = "Közepes pálya";
             this.mediumGameTableOption.Click += new System.EventHandler(this.mediumGameTableOption_Click);
             // 
             // bigGameTableOption
             // 
             this.bigGameTableOption.Name = "bigGameTableOption";
-            this.bigGameTableOption.Size = new System.Drawing.Size(152, 22);
+            this.bigGameTableOption.Size = new System.Drawing.Size(148, 22);
             this.bigGameTableOption.Text = "Nagy pálya";
             this.bigGameTableOption.Click += new System.EventHandler(this.bigGameTableOption_Click);
             // 
@@ -145,43 +146,48 @@
             // 
             // openFileDialog
             // 
-            this.openFileDialog.FileName = "openFileDialog";
+        
             this.openFileDialog.Filter = "Snake tábla (*.stl)|*.stl";
             this.openFileDialog.Title = "Snake játék betöltése";
             // 
-            // scoreTextLabel
+            // statusStrip1
             // 
-            this.scoreTextLabel.AutoSize = true;
-            this.scoreTextLabel.Location = new System.Drawing.Point(246, 40);
-            this.scoreTextLabel.Name = "scoreTextLabel";
-            this.scoreTextLabel.Size = new System.Drawing.Size(44, 13);
-            this.scoreTextLabel.TabIndex = 3;
-            this.scoreTextLabel.Text = "Pontok:";
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.GameScoreLabel,
+            this.GameScoreTextLabel,
+            this.progressLabel});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 256);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(383, 22);
+            this.statusStrip1.TabIndex = 3;
+            this.statusStrip1.Text = "statusStrip1";
             // 
-            // scoreLabel
+            // GameScoreLabel
             // 
-            this.scoreLabel.AutoSize = true;
-            this.scoreLabel.Location = new System.Drawing.Point(307, 40);
-            this.scoreLabel.Name = "scoreLabel";
-            this.scoreLabel.Size = new System.Drawing.Size(0, 13);
-            this.scoreLabel.TabIndex = 4;
-            this.scoreLabel.Text = "0";
+            this.GameScoreLabel.Name = "GameScoreLabel";
+            this.GameScoreLabel.Size = new System.Drawing.Size(48, 17);
+            this.GameScoreLabel.Text = "Pontok:";
+            // 
+            // GameScoreTextLabel
+            // 
+            this.GameScoreTextLabel.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
+            this.GameScoreTextLabel.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
+            this.GameScoreTextLabel.Name = "GameScoreTextLabel";
+            this.GameScoreTextLabel.Size = new System.Drawing.Size(0, 17);
+            this.GameScoreTextLabel.Text = "0";
             // 
             // progressLabel
             // 
-            this.progressLabel.AutoSize = true;
-            this.progressLabel.Location = new System.Drawing.Point(246, 113);
+            this.progressLabel.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Right;
+            this.progressLabel.BorderStyle = System.Windows.Forms.Border3DStyle.Etched;
             this.progressLabel.Name = "progressLabel";
-            this.progressLabel.Size = new System.Drawing.Size(53, 13);
-            this.progressLabel.TabIndex = 5;
-            this.progressLabel.Text = "Esemény:";
+            this.progressLabel.Size = new System.Drawing.Size(54, 17);
+            this.progressLabel.Text = "Esemény";
             // 
             // GameForm
             // 
             this.ClientSize = new System.Drawing.Size(383, 278);
-            this.Controls.Add(this.progressLabel);
-            this.Controls.Add(this.scoreLabel);
-            this.Controls.Add(this.scoreTextLabel);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.gameTableBox);
             this.Controls.Add(this.menuStrip2);
             this.MainMenuStrip = this.menuStrip2;
@@ -190,6 +196,8 @@
             this.Load += new System.EventHandler(this.GameForm_Load);
             this.menuStrip2.ResumeLayout(false);
             this.menuStrip2.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -224,9 +232,10 @@
         private System.Windows.Forms.GroupBox gameTableBox;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.Label scoreTextLabel;
-        private System.Windows.Forms.Label scoreLabel;
-        private System.Windows.Forms.Label progressLabel;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ToolStripStatusLabel GameScoreLabel;
+        private System.Windows.Forms.ToolStripStatusLabel GameScoreTextLabel;
+        private System.Windows.Forms.ToolStripStatusLabel progressLabel;
     }
 }
 

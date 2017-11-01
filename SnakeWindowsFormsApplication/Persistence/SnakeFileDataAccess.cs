@@ -37,7 +37,7 @@ namespace SnakeWindowsFormsApplication.Persistence
                         line = await reader.ReadLineAsync();
                         numbers = line.Split(' ');
                         snake.DirectionX = Int32.Parse(numbers[0]);
-                        snake.DirectionY = Int32.Parse(numbers[0]);
+                        snake.DirectionY = Int32.Parse(numbers[1]);
 
 
                     // Tábla létrehozása és a kígyó többi részének beolvasása
@@ -80,10 +80,10 @@ namespace SnakeWindowsFormsApplication.Persistence
                 {
                     using (StreamWriter writer = new StreamWriter(path)) // fájl megnyitása
                     {
-                        writer.WriteAsync(table.Size+ " " +table.Score); // kiírjuk a pályaméretet, kiírjuk az aktuális pontszámot
-                        writer.WriteAsync(snake.getHead()._posX + " "+snake.getHead()._posY); //melyik mező a kígyó feje
-                        writer.WriteAsync(snake.DirectionX + " " + snake.DirectionY); // Kiírom, hogy a kígyó épp milyen irányba készült haladni 
-                 
+                        await writer.WriteLineAsync(table.Size+ " " +table.Score); // kiírjuk a pályaméretet, kiírjuk az aktuális pontszámot
+                        await writer.WriteLineAsync(snake.getHead()._posX + " "+snake.getHead()._posY); //melyik mező a kígyó feje
+                        await writer.WriteLineAsync(snake.DirectionX + " " + snake.DirectionY); // Kiírom, hogy a kígyó épp milyen irányba készült haladni 
+                        
                          for (Int32 i = 0; i < table.Size; i++)
                          {
                              for (Int32 j = 0; j < table.Size; j++)
