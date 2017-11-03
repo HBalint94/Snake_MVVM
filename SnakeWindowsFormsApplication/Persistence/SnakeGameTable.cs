@@ -59,6 +59,8 @@ namespace SnakeWindowsFormsApplication.Persistence
         #region Fields
 
         private Int32[,] _fieldValues; // mezőértékek , 0:üres,1:kigyó,2:taplalek
+
+        
        
         #endregion
 
@@ -69,6 +71,17 @@ namespace SnakeWindowsFormsApplication.Persistence
         /// </summary>
         public Int32 Size { get { return _fieldValues.GetLength(0); } set { Size = value; } }
 
+        private Snake snake;
+
+        public void setSnake(Snake s)
+        {
+            this.snake = s;
+        }
+        public Snake getSnake()
+        {
+            return snake;
+        }
+        
         /// <summary>
         /// Mező értékének lekérdezése.
         /// </summary>
@@ -97,11 +110,24 @@ namespace SnakeWindowsFormsApplication.Persistence
         /// <param name="tableSize">Játéktábla mérete.</param>
         public SnakeGameTable(Int32 tableSize)
         {
+            if (tableSize< 0)
+                throw new ArgumentOutOfRangeException("The table size is less than 0.", "tableSize");
+
+        _fieldValues = new Int32[tableSize, tableSize];
+            Score = 0;
+            snake = new Snake(tableSize/2+1, tableSize/2+1);
+            
+
+        }
+    public SnakeGameTable(Int32 tableSize,Snake snake)
+        {
             if (tableSize < 0)
                 throw new ArgumentOutOfRangeException("The table size is less than 0.", "tableSize");
 
             _fieldValues = new Int32[tableSize, tableSize];
             Score = 0;
+            snake = new Snake(tableSize/2+1,tableSize/2+1);
+            this.snake = snake;
 
         }
          /// <summary>
@@ -116,6 +142,7 @@ namespace SnakeWindowsFormsApplication.Persistence
            
             _fieldValues = new Int32[tableSize, tableSize];
             score = Score;
+            snake = new Snake(tableSize / 2 + 1, tableSize / 2 + 1);    
         }
         #endregion
 

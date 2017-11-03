@@ -38,6 +38,7 @@ namespace SnakeWindowsFormsApplication
 
         private void setTheOptions()
         {
+
             //adatelérés példányosítása
             _dataAccess = new SnakeFileDataAccess();
             // Játék model példányosítása
@@ -56,10 +57,38 @@ namespace SnakeWindowsFormsApplication
 
             _gamemodel.NewGame(_mapsize);
         }
-       
+        private void setTheOptionsFromFile()
+        {
+            if(_gamemodel != null)
+            {
+                _gamemodel.SnakeMoved -= new EventHandler<SnakeEventArgs>(SnakeMoved);
+                _gamemodel.GameOver -= gameOver;
+                _gamemodel.OnMoveChange -= SetupTable;
+
+            }
+
+            //adatelérés példányosítása
+            _dataAccess = new SnakeFileDataAccess();
+            // Játék model példányosítása
+            _gamemodel = new SnakeGameModel(_dataAccess, _mapsize);
+            // Snake mozgásának esemény kezelőjének és a játék vége eseménykezelőjének felvétele
+            _gamemodel.SnakeMoved += new EventHandler<SnakeEventArgs>(SnakeMoved);
+            _gamemodel.GameOver += gameOver;
+            _gamemodel.OnMoveChange += SetupTable;
+            // Generálom a táblát a kiválasztott mérettel a játék indul.
+            generateTable(_mapsize);
+            _gamestarted = true;
+            progressLabel.Text = "A játék folyik!";
+            // felveszem a megjelenített pályára a nyomógombokat és aktiválom is őket.
+            gameTableBox.KeyUp += new KeyEventHandler(keyPressed);
+            gameTableBox.Focus();
+
+            
+        }
+
         #region METHODS
 
-        
+
         private void SnakeMoved(object sender, SnakeEventArgs e)
         {
             if (e.isEat)
@@ -250,7 +279,7 @@ namespace SnakeWindowsFormsApplication
         /// </summary>
         private async void loadGameOption_Click(Object sender, EventArgs e)
         {
-            setTheOptions();
+            setTheOptionsFromFile();
             Boolean restartTimer = _gamemodel.GameTimer.Enabled;
             _gamemodel.GameTimer.Stop();
 

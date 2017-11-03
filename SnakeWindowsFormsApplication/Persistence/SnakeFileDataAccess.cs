@@ -42,6 +42,7 @@ namespace SnakeWindowsFormsApplication.Persistence
 
                     // Tábla létrehozása és a kígyó többi részének beolvasása
                     SnakeGameTable table = new SnakeGameTable(tableSize,gameScore);
+                    
 
 
                         for (Int32 i = 0; i < tableSize; i++)
@@ -49,18 +50,24 @@ namespace SnakeWindowsFormsApplication.Persistence
                             line = await reader.ReadLineAsync();
                             numbers = line.Split(' ');
                             for (Int32 j = 0; j < tableSize; j++)
-                            {
-                            Int32 currentValue = Int32.Parse(numbers[0]);
-                                if(currentValue == 1)
+                            {    
+                                if(Int32.Parse(numbers[j])== 1)
                                 {
                                 snake.AddElementToSnake(new SnakeBodyPart(i, j));
                                 }
                                 table.SetValue(i, j, Int32.Parse(numbers[j]));
                             }
                         }
-                        
-                          
-                        return table;
+
+                    snake.StepTheTailOfTheSnake();
+                    snake.DirectionX = 0;
+                    snake.DirectionY = 1;
+                    table.setSnake(snake);
+                    table.Score = gameScore;
+                    
+
+
+                    return table;
                     }
                 }
                 catch

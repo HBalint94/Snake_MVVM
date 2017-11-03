@@ -124,6 +124,7 @@ namespace SnakeWindowsFormsApplication.Model
             _gameOver = false;
            
         }
+        
 
 
         /// <summary>
@@ -160,9 +161,11 @@ namespace SnakeWindowsFormsApplication.Model
         {
             if (_dataAccess == null)
                 throw new InvalidOperationException("No data access is provided.");
-
-            _table = await _dataAccess.LoadAsync(path);
            
+            _table = await _dataAccess.LoadAsync(path);
+            _snake = _table.getSnake();
+            
+            
             _gameScore = _table.Score;
             _gameTimer.Start();
             _gamePaused = false;
@@ -194,7 +197,7 @@ namespace SnakeWindowsFormsApplication.Model
             {
                 return;
             }
-
+            
             Int32 newX = _snake.DirectionX + _snake.getHead()._posX;
             Int32 newY = _snake.DirectionY + _snake.getHead()._posY;
 
