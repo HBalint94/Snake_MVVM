@@ -100,8 +100,6 @@ namespace SnakeWindowsFormsApplication
                 _buttonGrid[e.tailPosX, e.tailPosY].BackColor = DefaultBackColor;
                 _buttonGrid[e.headPosX, e.headPosY].BackColor = Color.DarkOliveGreen;
             }
-            
-            
         }
         private void gameOver(object sender, SnakeEventArgs e)
         {
