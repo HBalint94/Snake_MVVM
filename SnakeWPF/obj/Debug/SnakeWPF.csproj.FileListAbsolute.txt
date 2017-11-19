@@ -1,0 +1,15 @@
+C:\Users\Balint\Documents\Eva2\SnakeMVVM\SnakeWPF\SnakeWPF\bin\Debug\SnakeWPF.exe.config
+C:\Users\Balint\Documents\Eva2\SnakeMVVM\SnakeWPF\SnakeWPF\bin\Debug\SnakeWPF.exe
+C:\Users\Balint\Documents\Eva2\SnakeMVVM\SnakeWPF\SnakeWPF\bin\Debug\SnakeWPF.pdb
+C:\Users\Balint\Documents\Eva2\SnakeMVVM\SnakeWPF\SnakeWPF\obj\Debug\SnakeWPF.csprojResolveAssemblyReference.cache
+C:\Users\Balint\Documents\Eva2\SnakeMVVM\SnakeWPF\SnakeWPF\obj\Debug\View\MainWindow.g.cs
+C:\Users\Balint\Documents\Eva2\SnakeMVVM\SnakeWPF\SnakeWPF\obj\Debug\App.g.cs
+C:\Users\Balint\Documents\Eva2\SnakeMVVM\SnakeWPF\SnakeWPF\obj\Debug\SnakeWPF_MarkupCompile.cache
+C:\Users\Balint\Documents\Eva2\SnakeMVVM\SnakeWPF\SnakeWPF\obj\Debug\SnakeWPF_MarkupCompile.lref
+C:\Users\Balint\Documents\Eva2\SnakeMVVM\SnakeWPF\SnakeWPF\obj\Debug\View\MainWindow.baml
+C:\Users\Balint\Documents\Eva2\SnakeMVVM\SnakeWPF\SnakeWPF\obj\Debug\SnakeWPF.g.resources
+C:\Users\Balint\Documents\Eva2\SnakeMVVM\SnakeWPF\SnakeWPF\obj\Debug\SnakeWPF.Properties.Resources.resources
+C:\Users\Balint\Documents\Eva2\SnakeMVVM\SnakeWPF\SnakeWPF\obj\Debug\SnakeWPF.csproj.GenerateResource.Cache
+C:\Users\Balint\Documents\Eva2\SnakeMVVM\SnakeWPF\SnakeWPF\obj\Debug\SnakeWPF.csproj.CoreCompileInputs.cache
+C:\Users\Balint\Documents\Eva2\SnakeMVVM\SnakeWPF\SnakeWPF\obj\Debug\SnakeWPF.exe
+C:\Users\Balint\Documents\Eva2\SnakeMVVM\SnakeWPF\SnakeWPF\obj\Debug\SnakeWPF.pdb
