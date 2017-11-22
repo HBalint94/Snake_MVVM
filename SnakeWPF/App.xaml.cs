@@ -1,12 +1,13 @@
 ﻿using SnakeWPF.Model;
 using SnakeWPF.Persistence;
-using SnakeWPF.View;
+
 using SnakeWPF.ViewModel;
 using Microsoft.Win32;
 using System;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Threading;
+using SnakeWPF.View;
 
 namespace SnakeWPF
 {
@@ -21,7 +22,7 @@ namespace SnakeWPF
         private SnakeGameModel _model;
         private SnakeViewModel _viewModel;
         private MainWindow _view;
-        private DispatcherTimer _timer;
+       
 
         #endregion
 
@@ -41,14 +42,14 @@ namespace SnakeWPF
 
         private void App_Startup(object sender, StartupEventArgs e)
         {
-            _model = new SnakeGameModel(new SnakeFileDataAccess(), 10);
-            _model.GameOver += new EventHandler<SnakeEventArgs>(Model_GameOver);
             // nézemodell létrehozása
-            _viewModel = new SnakeViewModel(_model,10);
-            _viewModel.NewGame += new EventHandler(ViewModel_NewGame);
+            _viewModel = new SnakeViewModel(10);
+           /* _viewModel.NewGame += new EventHandler(ViewModel_NewGame);
             _viewModel.ExitGame += new EventHandler(ViewModel_ExitGame);
             _viewModel.LoadGame += new EventHandler(ViewModel_LoadGame);
-            _viewModel.SaveGame += new EventHandler(ViewModel_SaveGame);
+            _viewModel.SaveGame += new EventHandler(ViewModel_SaveGame);*/
+            _model = _viewModel.GameModel;
+            _mapSize = 10;
 
             // nézet létrehozása
             _view = new MainWindow();
@@ -77,7 +78,7 @@ namespace SnakeWPF
         }
 
         #endregion
-
+/*
         #region ViewModel event handlers
 
         /// <summary>
@@ -106,7 +107,7 @@ namespace SnakeWPF
                     // játék betöltése
                     await _model.LoadGameAsync(openFileDialog.FileName);
 
-                    _timer.Start();
+                    _model.GameTimer.Start();
                 }
             }
             catch (SnakeDataException)
@@ -184,6 +185,6 @@ namespace SnakeWPF
             }
         }
 
-        #endregion
+        #endregion*/
     }
 }

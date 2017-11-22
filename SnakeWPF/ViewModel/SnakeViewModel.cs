@@ -21,6 +21,7 @@ namespace SnakeWPF.ViewModel
         private Boolean isGamePaused;
         private String gameEvent;
         private Int32 gameScoreView;
+        private Boolean gameStarted;
 
         #endregion
 
@@ -32,6 +33,8 @@ namespace SnakeWPF.ViewModel
         public String GameEvent { get { return gameEvent; } set { GameEvent = value; } }
 
         public Int32 GameScoreView { get { return gameScoreView;} set { GameScoreView = value; } }
+
+        public SnakeGameModel GameModel { get { return _model; } }
         /// <summary>
         /// Új játék kezdése parancs lekérdezése.
         /// </summary>
@@ -87,6 +90,12 @@ namespace SnakeWPF.ViewModel
         /// </summary>
         public event EventHandler ExitGame;
 
+        public DelegateCommand NewEasyGameCommand { get; private set; }
+        public DelegateCommand NewMediumGameCommand { get; private set; }
+        public DelegateCommand NewHardGameCommand { get; private set; }
+        public DelegateCommand MoveCommand { get; private set; }
+        public DelegateCommand PauseCommand { get; private set; }
+
         #endregion
 
         #region Constructors
@@ -95,21 +104,13 @@ namespace SnakeWPF.ViewModel
         /// Sudoku nézetmodell példányosítása.
         /// </summary>
         /// <param name="model">A modell típusa.</param>
-        public SnakeViewModel(SnakeGameModel model,Int32 size)
+        public SnakeViewModel(Int32 size)
         {
-            DelegateCommand NewEasyGameCommand = new DelegateCommand(param => { changeDifficulty(size); });
-            DelegateCommand NewMediumGameCommand = new DelegateCommand(param => { changeDifficulty(size); });
-            DelegateCommand NewHardGameCommand = new DelegateCommand(param => { changeDifficulty(size); });
-            DelegateCommand MoveCommand = new DelegateCommand(param => StepGame(param.ToString()));
-            DelegateCommand PauseCommand = new DelegateCommand(param => { PauseGame(); });
-
-
-
-            // játék csatlakoztatása
-            _model = model;
-            _model.SnakeMoved += new EventHandler<SnakeEventArgs>(Model_SnakeMoved);
-            _model.GameOver += new EventHandler<SnakeEventArgs>(Model_GameOver);
-            _model.OnMoveChange += RefreshTable;
+            NewEasyGameCommand = new DelegateCommand(param => { changeDifficulty(size); });
+            NewMediumGameCommand = new DelegateCommand(param => { changeDifficulty(size); });
+            NewHardGameCommand = new DelegateCommand(param => { changeDifficulty(size); });
+            MoveCommand = new DelegateCommand(param => StepGame(param.ToString()));
+            PauseCommand = new DelegateCommand(param => { PauseGame(); });
 
             changeDifficulty(size);
 
@@ -117,12 +118,24 @@ namespace SnakeWPF.ViewModel
 
         private void changeDifficulty(Int32 Size)
         {
-            
-           
 
+            if (gameStarted)
+            {
+                _model.GameOver -= new EventHandler<SnakeEventArgs>(Model_GameOver);
+                _model.SnakeMoved -= new EventHandler<SnakeEventArgs>(Model_SnakeMoved);
+                _model = null;
+                Fields.Clear();
+
+            }
+            // játék csatlakoztatása
+            _model = new SnakeGameModel(Size);
+            _model.SnakeMoved += new EventHandler<SnakeEventArgs>(Model_SnakeMoved);
+            _model.GameOver += new EventHandler<SnakeEventArgs>(Model_GameOver);
+            _model.OnMoveChange += RefreshTable;
             //propertyk beállítása
             gameScoreView = _model.GameScore;
             mapSize = Size;
+            gameStarted = true;
             isGamePaused = false;
             gameEvent = "Kezdőjék a játék";
             OnPropertyChanged("gameScoreView");
