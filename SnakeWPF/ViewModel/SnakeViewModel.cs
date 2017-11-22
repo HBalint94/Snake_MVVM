@@ -104,13 +104,20 @@ namespace SnakeWPF.ViewModel
         /// Sudoku nézetmodell példányosítása.
         /// </summary>
         /// <param name="model">A modell típusa.</param>
-        public SnakeViewModel(Int32 size)
+        public SnakeViewModel(Int32 size,SnakeGameModel model)
         {
             NewEasyGameCommand = new DelegateCommand(param => { changeDifficulty(size); });
             NewMediumGameCommand = new DelegateCommand(param => { changeDifficulty(size); });
             NewHardGameCommand = new DelegateCommand(param => { changeDifficulty(size); });
             MoveCommand = new DelegateCommand(param => StepGame(param.ToString()));
             PauseCommand = new DelegateCommand(param => { PauseGame(); });
+
+            // játék csatlakoztatása
+            _model = model;
+            _model.SnakeMoved += new EventHandler<SnakeEventArgs>(Model_SnakeMoved);
+            _model.GameOver += new EventHandler<SnakeEventArgs>(Model_GameOver);
+            _model.OnMoveChange += RefreshTable;
+            gameStarted = false;
 
             changeDifficulty(size);
 
@@ -127,15 +134,10 @@ namespace SnakeWPF.ViewModel
                 Fields.Clear();
 
             }
-            // játék csatlakoztatása
-            _model = new SnakeGameModel(Size);
-            _model.SnakeMoved += new EventHandler<SnakeEventArgs>(Model_SnakeMoved);
-            _model.GameOver += new EventHandler<SnakeEventArgs>(Model_GameOver);
-            _model.OnMoveChange += RefreshTable;
+           
             //propertyk beállítása
             gameScoreView = _model.GameScore;
             mapSize = Size;
-            gameStarted = true;
             isGamePaused = false;
             gameEvent = "Kezdőjék a játék";
             OnPropertyChanged("gameScoreView");
@@ -250,6 +252,8 @@ namespace SnakeWPF.ViewModel
         {
             if (NewGame != null)
                 NewGame(this, EventArgs.Empty);
+            gameStarted = true;
+
         }
 
 
@@ -261,6 +265,8 @@ namespace SnakeWPF.ViewModel
         {
             if (LoadGame != null)
                 LoadGame(this, EventArgs.Empty);
+            gameStarted = true;
+
         }
 
         /// <summary>

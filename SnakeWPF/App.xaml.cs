@@ -42,13 +42,15 @@ namespace SnakeWPF
 
         private void App_Startup(object sender, StartupEventArgs e)
         {
+            _model = new SnakeGameModel(10);
+            
             // nézemodell létrehozása
-            _viewModel = new SnakeViewModel(10);
-           /* _viewModel.NewGame += new EventHandler(ViewModel_NewGame);
+            _viewModel = new SnakeViewModel(10,_model);
+            _viewModel.NewGame += new EventHandler(ViewModel_NewGame);
             _viewModel.ExitGame += new EventHandler(ViewModel_ExitGame);
             _viewModel.LoadGame += new EventHandler(ViewModel_LoadGame);
-            _viewModel.SaveGame += new EventHandler(ViewModel_SaveGame);*/
-            _model = _viewModel.GameModel;
+            _viewModel.SaveGame += new EventHandler(ViewModel_SaveGame);
+            //_model = _viewModel.GameModel;
             _mapSize = 10;
 
             // nézet létrehozása
@@ -78,7 +80,7 @@ namespace SnakeWPF
         }
 
         #endregion
-/*
+
         #region ViewModel event handlers
 
         /// <summary>
@@ -185,6 +187,6 @@ namespace SnakeWPF
             }
         }
 
-        #endregion*/
+        #endregion
     }
 }
