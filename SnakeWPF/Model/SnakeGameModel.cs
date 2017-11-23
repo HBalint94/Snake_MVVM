@@ -103,9 +103,7 @@ namespace SnakeWPF.Model
             _gameTableSize = size;
             _dataAccess = new SnakeFileDataAccess();
             _table = new SnakeGameTable(_gameTableSize);
-            _gameTimer = new Timer();
-            _gameTimer.Elapsed += new ElapsedEventHandler(Moving);
-            _gameTimer.Interval = 1000;
+          
         }
 
         public delegate void MoveChange();
@@ -130,7 +128,10 @@ namespace SnakeWPF.Model
             GenerateFields(size); // generáljuk a mezőket
             _gamePaused = false;
             _gameOver = false;
-
+            _gameTimer = new Timer();
+            _gameTimer.Elapsed += new ElapsedEventHandler(Moving);
+            _gameTimer.Interval = 1000;
+            _gameTimer.Start();
         }
 
 
