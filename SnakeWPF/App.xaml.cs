@@ -43,6 +43,7 @@ namespace SnakeWPF
         private void App_Startup(object sender, StartupEventArgs e)
         {
             _model = new SnakeGameModel(10);
+            _model.GameOver += new EventHandler<SnakeEventArgs>(Model_GameOver);
             
             // nézemodell létrehozása
             _viewModel = new SnakeViewModel(10,_model);
@@ -61,9 +62,9 @@ namespace SnakeWPF
 
         }
 
-        
-        #endregion
 
+        #endregion
+       
         #region View event handlers
 
         /// <summary>
@@ -97,8 +98,7 @@ namespace SnakeWPF
         /// </summary>
         private async void ViewModel_LoadGame(object sender, System.EventArgs e)
         {
-            Boolean restartTimer = _model.GameTimer.Enabled;
-            _model.GameTimer.Stop();
+            
             try
             {
                 OpenFileDialog openFileDialog = new OpenFileDialog(); // dialógusablak
@@ -116,8 +116,7 @@ namespace SnakeWPF
             {
                 MessageBox.Show("A fájl betöltése sikertelen!", "Sudoku", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            if (restartTimer)
-                _model.GameTimer.Start();
+          
 
 
         }

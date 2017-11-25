@@ -44,7 +44,7 @@ namespace SnakeWPF.Model
         /// <summary>
         /// Játéktábla lekérdezése.
         /// </summary>
-        public SnakeGameTable Table { get { return _table; } }
+        public SnakeGameTable Table { get { return _table; } set { } }
 
         /// <summary>
         /// Játék végének lekérdezése.
