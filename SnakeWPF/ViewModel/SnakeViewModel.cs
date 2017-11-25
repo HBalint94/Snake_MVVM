@@ -106,14 +106,15 @@ namespace SnakeWPF.ViewModel
         /// <param name="model">A modell típusa.</param>
         public SnakeViewModel(Int32 size,SnakeGameModel model)
         {
-            NewEasyGameCommand = new DelegateCommand(param => { changeDifficulty(size); });
-            NewMediumGameCommand = new DelegateCommand(param => { changeDifficulty(size); });
-            NewHardGameCommand = new DelegateCommand(param => { changeDifficulty(size); });
+            NewEasyGameCommand = new DelegateCommand(param => { changeDifficulty(10); });
+            NewMediumGameCommand = new DelegateCommand(param => { changeDifficulty(15); });
+            NewHardGameCommand = new DelegateCommand(param => { changeDifficulty(20); });
             MoveCommand = new DelegateCommand(param => StepGame(param.ToString()));
             PauseCommand = new DelegateCommand(param => { PauseGame(); });
 
             // játék csatlakoztatása
             _model = model;
+            
             _model.SnakeMoved += new EventHandler<SnakeEventArgs>(Model_SnakeMoved);
             _model.GameOver += new EventHandler<SnakeEventArgs>(Model_GameOver);
             _model.OnMoveChange += RefreshTable;
@@ -134,7 +135,8 @@ namespace SnakeWPF.ViewModel
                 Fields.Clear();
 
             }
-           
+            
+            _model = new SnakeGameModel(Size);
             //propertyk beállítása
             gameScoreView = _model.GameScore;
             mapSize = Size;
@@ -144,17 +146,19 @@ namespace SnakeWPF.ViewModel
             OnPropertyChanged("gameEvent");
 
 
+
             // parancsok kezelése
             NewGameCommand = new DelegateCommand(param => { OnNewGame(); RefreshTable(); });
             LoadGameCommand = new DelegateCommand(param => { OnLoadGame(); RefreshTable(); });
             SaveGameCommand = new DelegateCommand(param => OnSaveGame());
             ExitGameCommand = new DelegateCommand(param => OnExitGame());
 
+
             // játéktábla létrehozása
             Fields = new ObservableCollection<GameField>();
-            for (Int32 i = 0; i < _model.GameTableSize; i++) // inicializáljuk a mezőket
+            for (Int32 i = 0; i < mapSize; i++) // inicializáljuk a mezőket
             {
-                for (Int32 j = 0; j < _model.GameTableSize; j++)
+                for (Int32 j = 0; j < mapSize; j++)
                 {
                     Fields.Add(new GameField
                     {
@@ -166,6 +170,8 @@ namespace SnakeWPF.ViewModel
                     });
                 }
             }
+            OnPropertyChanged("MapSize");
+            OnPropertyChanged("Fields");
             RefreshTable();
         }
 
@@ -185,6 +191,7 @@ namespace SnakeWPF.ViewModel
         private void Model_GameOver(object sender, SnakeEventArgs e)
         {
             _model.GameTimer.Stop();
+            gameStarted = false;
         }
 
         #endregion
